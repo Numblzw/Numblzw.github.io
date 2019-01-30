@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="LZW&#39;s Blog">
 <meta property="og:description" content="二进制快速幂二进制快速幂主要用来计算形如$$a^b\equiv ans(mod\ p)$$中ans的值，当然也可以计算不模p的时候的值，不过那样的话如果不是高精度的题，为了防止爆long long，指数范围题目一般都会给的比较小。 先给出实现代码： 12345678910111213141516#define ll long longll quick(ll a,ll b,ll m)&amp;#123;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-30T13:43:33.963Z">
+<meta property="og:updated_time" content="2019-01-30T13:48:09.449Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="快速幂详解">
 <meta name="twitter:description" content="二进制快速幂二进制快速幂主要用来计算形如$$a^b\equiv ans(mod\ p)$$中ans的值，当然也可以计算不模p的时候的值，不过那样的话如果不是高精度的题，为了防止爆long long，指数范围题目一般都会给的比较小。 先给出实现代码： 12345678910111213141516#define ll long longll quick(ll a,ll b,ll m)&amp;#123;">
@@ -350,7 +350,7 @@
 <p>先给出实现代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ll long long</span></span><br><span class="line"><span class="function">ll <span class="title">quick</span><span class="params">(ll a,ll b,ll m)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ll ans=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(b)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(b&amp;<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ans=(a*ans)%m;</span><br><span class="line">        &#125;</span><br><span class="line">        a=(a*a)%m;</span><br><span class="line">        b&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//其中a为底数，b为指数，m为模数</span></span><br></pre></td></tr></table></figure>
 <h4 id="实现原理如下："><a href="#实现原理如下：" class="headerlink" title="实现原理如下："></a>实现原理如下：</h4><p>之所以被称为是二进制快速幂，是因为将指数b表示为二进制的形式，考虑指数b二进制表示中每一位对应的是a的多少次方。</p>
-<p>举个栗子：比如要计算 a的11次方，先将11表示为二进制的形式：1011。一共有四位从高到低位分别代表着<br>$ 有1个a^8，0个a^4，1个a^2,1个a^1相乘 $<br>代码中的b&amp;1计算的是b的二进制表示的最低位，在while中的每次循环都会让b的二进制表示右移一位，而a会变为a*a，这样的话<br>$$ a就会从最开始的a,依次变为a^2，a^4，a^8\cdots $$<br>依次和b的二进制表示中对应的数位相乘，就可以计算出最后的答案。</p>
+<p>举个栗子：比如要计算 a的11次方，先将11表示为二进制的形式：1011。一共有四位从高到低位分别代表着 $ 有1个a^8，0个a^4，1个a^2,1个a^1相乘 $<br>代码中的b&amp;1计算的是b的二进制表示的最低位，在while中的每次循环都会让b的二进制表示右移一位，而a会变为a*a，这样的话 $ a就会从最开始的a,依次变为a^2，a^4，a^8\cdots $<br>依次和b的二进制表示中对应的数位相乘，就可以计算出最后的答案。</p>
 
       
     </div>
