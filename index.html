@@ -349,116 +349,15 @@
       
         
           
-            <h2 id="二进制快速幂"><a href="#二进制快速幂" class="headerlink" title="二进制快速幂"></a>二进制快速幂</h2><p>二进制快速幂主要用来计算形如</p>
-<script type="math/tex; mode=display">
-a^b\equiv ans(mod\ p)</script><p>中ans的值，当然也可以计算不模p的时候的值，不过那样的话如果不是高精度的题，为了防止爆long long，指数范围题目一般都会给的比较小。</p>
-<p>先给出实现代码：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ll long long</span></span><br><span class="line"><span class="function">ll <span class="title">quick</span><span class="params">(ll a,ll b,ll m)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ll ans=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(b)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(b&amp;<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ans=(a*ans)%m;</span><br><span class="line">        &#125;</span><br><span class="line">        a=(a*a)%m;</span><br><span class="line">        b&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//其中a为底数，b为指数，m为模数</span></span><br></pre></td></tr></table></figure>
-<h4 id="实现原理如下："><a href="#实现原理如下：" class="headerlink" title="实现原理如下："></a>实现原理如下：</h4><p>之所以被称为是二进制快速幂，是因为将指数b表示为二进制的形式，考虑指数b二进制表示中每一位对应的是a的多少次方。</p>
-<p>举个栗子：比如要计算 a的11次方，先将11表示为二进制的形式：1011。一共有四位从高到低位分别代表着 $ 有1个a^8，0个a^4，1个a^2,1个a^1相乘 $<br>代码中的b&amp;1计算的是b的二进制表示的最低位，在while中的每次循环都会让b的二进制表示右移一位，而a会变为a*a，这样的话 $ a就会从最开始的a,依次变为a^2，a^4，a^8\cdots $<br>依次和b的二进制表示中对应的数位相乘，就可以计算出最后的答案。PS:如果底数a比较大的时候，请在调用函数之前手动把a%=m<br>时间复杂度为  $ O(logb) $</p>
-<h2 id="十进制快速幂"><a href="#十进制快速幂" class="headerlink" title="十进制快速幂"></a>十进制快速幂</h2><p>十进制快速幂基于二进制快速幂的思想，只不过每次都考虑指数的十进制表示中的每一位</p>
-<h4 id="十进制快速幂的优点"><a href="#十进制快速幂的优点" class="headerlink" title="十进制快速幂的优点"></a>十进制快速幂的优点</h4><p>十进制快速幂可以解决指数爆long long时的情形。利用字符串来存指数的每一位，不需要将十进制转化为二进制的步骤。如果指数没有爆long long的话，是可以用long long来存指数，也就是说可以直接利用位运算来得到二进制表示中每一位的数值。</p>
-<p>十进制快速幂在解决矩阵快速幂的时候，尤其是矩阵的指数爆long long的时候，是十分有效的手段，这一部分将在矩阵快速幂的部分进行详细介绍。</p>
-<p>十进制快速幂有两种不同的计算方法</p>
-<p><strong>方法1：</strong></p>
-<p>比如要计算a的1234次方，可以将其拆解为$ (a^4)^1，(a^3)^{10}，(a^2)^{100}，(a^1)^{1000} $这四个数相乘，这种方法的优点在于可以直接预处理 $ a^0，a^1，a^2，……a^9 $每次都可以实现O(1)来计算$ a^t (0\leq t\leq 9) $ 缺点在于如果模数与10不互质的话，会导致欧拉降幂完全失效。假设即使与10互质的话，如果模数不是素数，还需要求他的欧拉函数，这将会把问题弄的比较复杂，因此如果模数为素数的时候，这种方法会比较高效。这种快速幂的方法由于用到了欧拉降幂，因此不会适用于矩阵快速幂的乘法！！！因为矩阵快速幂没有办法欧拉降幂。下面贴出代码：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ll long long</span></span><br><span class="line"><span class="function">ll <span class="title">quick</span><span class="params">(ll a,ll b,ll m)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ll ans=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(b)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(b&amp;<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ans=(a*ans)%m;</span><br><span class="line">        &#125;</span><br><span class="line">        a=(a*a)%m;</span><br><span class="line">        b&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//二进制快速幂</span></span><br><span class="line"></span><br><span class="line"><span class="function">ll <span class="title">quick_mod_10</span><span class="params">(ll a,<span class="built_in">string</span> b,ll m)</span>                   <span class="comment">//当模数为素数时</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ll ans=<span class="number">1</span>,res[<span class="number">10</span>],temp=<span class="number">1</span>;;                         <span class="comment">//res[]用来存a^0,a^1,a^2,a^3……a^9</span></span><br><span class="line">    a%=m;</span><br><span class="line">    <span class="keyword">int</span> len=b.length();</span><br><span class="line">    res[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">10</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        res[i]=(res[i<span class="number">-1</span>]*a)%m;                        <span class="comment">//预处理一下res[]</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=len<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)</span><br><span class="line">    &#123;</span><br><span class="line">        ans=(ans*quick(res[(<span class="keyword">int</span>)(b[i]-<span class="string">'0'</span>)],temp,m))%m;</span><br><span class="line">        temp=(temp*<span class="number">10</span>)%(mod<span class="number">-1</span>);                       <span class="comment">//欧拉降幂</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>方法2：</strong></p>
-<p>比如要计算a的1234次方，可以将其拆解为$ (a^1)^4，(a^{10})^3，(a^{100})^2，(a^{1000})^1 $这四个数相乘，这种方法的优点在于不需要欧拉降幂，假设你已经知道了$ temp=a^{100} $ 那么下一步要求 $ temp=a^{1000} $时，可以直接计算 $ temp^{10} $不会遇到幂次太大而需要降幂的情形，这种方法相对来说不足的是，外层的幂次每次都需要重新计算，因为每次底数都会不一样，相对于上一种方法需要多花一点点时间，不过这种方法的模数没有任何限制。后面将会介绍这种方法在矩阵快速幂中的应用。下面贴出代码：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ll long long</span></span><br><span class="line"><span class="function">ll <span class="title">quick</span><span class="params">(ll a,ll b,ll m)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ll ans=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(b)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(b&amp;<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ans=(a*ans)%m;</span><br><span class="line">        &#125;</span><br><span class="line">        a=(a*a)%m;</span><br><span class="line">        b&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//二进制快速幂</span></span><br><span class="line"></span><br><span class="line"><span class="function">ll <span class="title">quickmod_10</span><span class="params">(ll a,<span class="built_in">string</span> b,ll m)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ll ans=<span class="number">1</span>;</span><br><span class="line">    a%=m;</span><br><span class="line">    <span class="keyword">int</span> len=b.length();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=len<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)</span><br><span class="line">    &#123;</span><br><span class="line">        ans=(ans*quick(a,(<span class="keyword">int</span>)(b[i]-<span class="string">'0'</span>),m))%m;</span><br><span class="line">        a=quick(a,<span class="number">10</span>,m);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>PS:十进制快速幂的方法一般需要将指数转化为string或者char []来存，是一种防止指数爆long long的方法。如果当底数a也爆long long的时候，也可用快速幂的方法，不过先需要对a高精度取模，不过像这种高精度的题，个人建议还是用Java或者Python比较好，用C++写高精度太复杂了……</strong></p>
-<h2 id="Tips-快速乘"><a href="#Tips-快速乘" class="headerlink" title="Tips: 快速乘"></a>Tips: 快速乘</h2><p>其实这一般来说出题人不会卡这种东西，但是为了防止毒瘤出题人，我还是把这一部分讲一下。这是一个快速求</p>
-<script type="math/tex; mode=display">
-a*b\equiv ans(mod\ p)</script><p>的方法，和二进制快速幂本质上差不多，作用是如果遇到模数大于3e9的话，两个数直接乘可能会爆long long，快速乘可以避免乘的时候爆long long的情形。</p>
-<p>这里直接贴出代码：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ll <span class="title">quick_c</span><span class="params">(ll a,ll b,ll m)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ll ans=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(b)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(b&amp;<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ans=(ans+a)%m;</span><br><span class="line">        &#125;</span><br><span class="line">        b&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">        a=(a+a)%m;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//快速乘</span></span><br></pre></td></tr></table></figure>
-<p>上述所有快速幂中的乘法都可以用快速乘来代替。</p>
-<h2 id="二进制矩阵快速幂"><a href="#二进制矩阵快速幂" class="headerlink" title="二进制矩阵快速幂"></a>二进制矩阵快速幂</h2><p>矩阵快速幂的作用是，在已知一个线性递推式的情况下，可以在$O(logn)$复杂度求出$a_n$的值。</p>
-<p>举个栗子，我们都知道，斐波那契数列通项公式是</p>
-<script type="math/tex; mode=display">
-F_{n+2}=F_{n+1}+F_{n} \ \ \ \ (n>0)</script><p>如果要求$F_{10000000000}$的话，用$O(n)$算法是一定会超时的，这个时候，就需要用到矩阵快速幂了。我们构造一个如下的递推式：</p>
-<script type="math/tex; mode=display">
-\left[
-\begin{matrix}
-  F_{n+2}\\
-  F_{n+1}
-\end{matrix}
-\right]
-=
-\left[
-\begin{matrix}
-  1&1\\
-  1&0
-\end{matrix}
-\right]
-\left[
-\begin{matrix}
-  F_{n+1}\\
-  F_{n}
-\end{matrix}
-\right]</script><p>因此我们可以得到</p>
-<script type="math/tex; mode=display">
-\left[
-\begin{matrix}
-  F_{n+2}\\
-  F_{n+1}
-\end{matrix}
-\right]
-=
-\left[
-\begin{matrix}
-  1&1\\
-  1&0
-\end{matrix}
-\right]^{n}
-\left[
-\begin{matrix}
-  F_{2}\\
-  F_{1}
-\end{matrix}
-\right]</script><p>那么问题就可以转化为求</p>
-<script type="math/tex; mode=display">
-Matrix=\left[
-\begin{matrix}
-  1&1\\
-  1&0
-\end{matrix}
-\right]^{n}</script><p>这就可以转化为二进制快速幂来处理了，只不过把数的乘法换成了矩阵的乘法。下面贴出我的板子:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ll mod=<span class="number">1e9</span>+<span class="number">7</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Matrix</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> sizen;  <span class="comment">//矩阵行列数</span></span><br><span class="line">    ll m[<span class="number">105</span>][<span class="number">105</span>];                  <span class="comment">//矩阵结构体</span></span><br><span class="line">    Matrix(<span class="keyword">int</span> si=<span class="number">100</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        ll temp[<span class="number">105</span>][<span class="number">105</span>]=&#123;&#123;&#125;......&#123;&#125;&#125;; <span class="comment">//重点注意一下矩阵的初始化在这里 Y(^_^)Y</span></span><br><span class="line">        sizen=si;                               <span class="comment">//矩阵的下标从m[1][1]开始</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=si; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;=si; j++)</span><br><span class="line">            &#123;</span><br><span class="line">                m[i][j]=temp[i][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">friend</span> Matrix <span class="keyword">operator</span>*(Matrix a,Matrix b)                   <span class="comment">//模拟矩阵乘法</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function">Matrix <span class="title">c</span><span class="params">(a.sizen)</span></span>;</span><br><span class="line">        <span class="built_in">memset</span>(c.m,<span class="number">0</span>,<span class="keyword">sizeof</span>(c.m));</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=a.sizen; i++)</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;=a.sizen; j++)</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>; k&lt;=a.sizen; k++)</span><br><span class="line">                    c.m[i][j]=(c.m[i][j]+a.m[i][k]*b.m[k][j]+mod)%mod;</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">friend</span> Matrix <span class="keyword">operator</span>^(Matrix a,<span class="keyword">int</span> b)                        <span class="comment">//快速幂 矩阵a的b次方</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function">Matrix <span class="title">c</span><span class="params">(a.sizen)</span></span>;</span><br><span class="line">        <span class="built_in">memset</span>(c.m,<span class="number">0</span>,<span class="keyword">sizeof</span>(c.m));</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=a.sizen; i++)                            <span class="comment">//初始化为单位矩阵</span></span><br><span class="line">            c.m[i][i]=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(b)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(b&amp;<span class="number">1</span>)</span><br><span class="line">                c=c*a;                                       <span class="comment">//快速幂</span></span><br><span class="line">            a=a*a;</span><br><span class="line">            b&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>如果矩阵是不变的话，直接在类里面的构造函数初始化就行了。如果矩阵随着输入输出改变的话，在类里面的temp数组可以不初始化，定义矩阵后，直接在main函数中初始化即可。不过我觉得我的这个板子还是写的丑了点，如果有看到更好的板子，我再来修改。</p>
-<p>矩阵快速幂不仅仅能用在数列的线性递推式中，如果一个数列经过变换后能转化为线性递推式的话，也可以用矩阵快速幂来做。</p>
-<p>比如$a<em>{n+1}=a</em>{n}+n^2$。这个数列可以通过三阶差分转化为线性递推式，但是也可以不转化，直接构造如下递推式:</p>
-<script type="math/tex; mode=display">
-\left[
-\begin{matrix}
-  a_{n+1}\\
-  (n+1)^2\\
-  (n+1)\\
-  1
-\end{matrix}
-\right]
-=
-\left[
-\begin{matrix}
-  1&1&0&0\\
-  0&1&2&1\\
-  0&0&1&1\\
-  0&0&0&1
-\end{matrix}
-\right]
-\left[
-\begin{matrix}
-  a_{n}\\
-  n^2\\
-  n\\
-  1
-\end{matrix}
-\right]</script><p>也可以直接求出来。</p>
-<p>上述的二进制矩阵快速幂是用来求指数n在long long范围内的情形，如果指数超过long long的范围，可以考虑利用如下所说的十进制矩阵快速幂。</p>
-<h2 id="十进制矩阵快速幂"><a href="#十进制矩阵快速幂" class="headerlink" title="十进制矩阵快速幂"></a>十进制矩阵快速幂</h2><p>未完待续……</p>
-<p>由于本人能力有限，如有错误，欢迎大佬们指正！QQ:906203494</p>
-
-          
+          二进制快速幂二进制快
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/30/快速幂详解/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
