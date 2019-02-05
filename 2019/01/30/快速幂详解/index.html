@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="二进制快速幂二进制快速幂主要用来计算形如  a^b\equiv ans(mod\ p)中ans的值，当然也可以计算不模p的时候的值，不过那样的话如果不是高精度的题，为了防止爆long long，指数范围题目一般都会给的比较小。 先给出实现代码： 12345678910111213141516#define ll long longll quick(ll a,ll b,ll m)&amp;#123;">
+<meta name="description" content="在ACM比赛中，经常会遇到求一个数的多少次幂的问题，有时候幂次特别大的时候，朴素算法就会超时，本篇文章就向大家介绍一下求一个数的幂次的快速方法——快速幂 二进制快速幂二进制快速幂主要用来计算形如  a^b\equiv ans(mod\ p)中ans的值，当然也可以计算不模p的时候的值，不过那样的话如果不是高精度的题，为了防止爆long long，指数范围题目一般都会给的比较小。 先给出实现代码：">
 <meta name="keywords" content="acm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="快速幂详解">
 <meta property="og:url" content="http://yoursite.com/2019/01/30/快速幂详解/index.html">
 <meta property="og:site_name" content="LZW&#39;s Blog">
-<meta property="og:description" content="二进制快速幂二进制快速幂主要用来计算形如  a^b\equiv ans(mod\ p)中ans的值，当然也可以计算不模p的时候的值，不过那样的话如果不是高精度的题，为了防止爆long long，指数范围题目一般都会给的比较小。 先给出实现代码： 12345678910111213141516#define ll long longll quick(ll a,ll b,ll m)&amp;#123;">
+<meta property="og:description" content="在ACM比赛中，经常会遇到求一个数的多少次幂的问题，有时候幂次特别大的时候，朴素算法就会超时，本篇文章就向大家介绍一下求一个数的幂次的快速方法——快速幂 二进制快速幂二进制快速幂主要用来计算形如  a^b\equiv ans(mod\ p)中ans的值，当然也可以计算不模p的时候的值，不过那样的话如果不是高精度的题，为了防止爆long long，指数范围题目一般都会给的比较小。 先给出实现代码：">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-05T13:22:00.821Z">
+<meta property="og:updated_time" content="2019-02-05T13:30:01.989Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="快速幂详解">
-<meta name="twitter:description" content="二进制快速幂二进制快速幂主要用来计算形如  a^b\equiv ans(mod\ p)中ans的值，当然也可以计算不模p的时候的值，不过那样的话如果不是高精度的题，为了防止爆long long，指数范围题目一般都会给的比较小。 先给出实现代码： 12345678910111213141516#define ll long longll quick(ll a,ll b,ll m)&amp;#123;">
+<meta name="twitter:description" content="在ACM比赛中，经常会遇到求一个数的多少次幂的问题，有时候幂次特别大的时候，朴素算法就会超时，本篇文章就向大家介绍一下求一个数的幂次的快速方法——快速幂 二进制快速幂二进制快速幂主要用来计算形如  a^b\equiv ans(mod\ p)中ans的值，当然也可以计算不模p的时候的值，不过那样的话如果不是高精度的题，为了防止爆long long，指数范围题目一般都会给的比较小。 先给出实现代码：">
 
 
 
@@ -346,7 +346,8 @@
       
 
       
-        <h2 id="二进制快速幂"><a href="#二进制快速幂" class="headerlink" title="二进制快速幂"></a>二进制快速幂</h2><p>二进制快速幂主要用来计算形如</p>
+        <p>在ACM比赛中，经常会遇到求一个数的多少次幂的问题，有时候幂次特别大的时候，朴素算法就会超时，本篇文章就向大家介绍一下求一个数的幂次的快速方法——快速幂</p>
+<h2 id="二进制快速幂"><a href="#二进制快速幂" class="headerlink" title="二进制快速幂"></a>二进制快速幂</h2><p>二进制快速幂主要用来计算形如</p>
 <script type="math/tex; mode=display">
 a^b\equiv ans(mod\ p)</script><p>中ans的值，当然也可以计算不模p的时候的值，不过那样的话如果不是高精度的题，为了防止爆long long，指数范围题目一般都会给的比较小。</p>
 <p>先给出实现代码：</p>
